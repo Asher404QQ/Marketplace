@@ -1,15 +1,39 @@
 package ru.kors.marketplace.service;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.kors.marketplace.models.Product;
+import ru.kors.marketplace.repositories.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class ProductService {
+    private final ProductRepository productRepository;
     private List<Product> products = new ArrayList<>();
     private static Long ID = 0L;
+
+    public List<Product> getProducts(String title) {
+        if(title != null) return productRepository.findByTitle(title);
+        return productRepository.findAll();
+    }
+
+    public void saveProduct(Product product) {
+        log.info("Saving new {}", product);
+        productRepository.save(product);
+    }
+
+    public void deleteProduct(Long id){
+        productRepository.deleteById(id);
+    }
+
+    public Product getProductByID(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
 
     {
         products.add(new Product(++ID, "Лунцзин Фуян Сань Ча", "\n" +
@@ -35,25 +59,5 @@ public class ProductService {
                 "Сухофрукты,\n" +
                 "Древесный,\n" +
                 "Бисквитный", 970, 100, "Torky"));
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void saveProduct(Product product) {
-        product.setId(++ID);
-        products.add(product);
-    }
-
-    public void deleteProduct(Long id){
-        products.removeIf(product -> product.getId().equals(id));
-    }
-
-    public Product getProductByID(Long id) {
-        for(Product product : products) {
-            if(product.getId().equals(id)) return product;
-        }
-        return null;
     }
 }
