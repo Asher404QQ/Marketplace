@@ -10,6 +10,9 @@
 <body>
 <h1>MARKETPLACE</h1>
 <h4>Подробная информация о товаре</h4>
+<#list images as img>
+    <img src="/images/${img.id}" height="60px"/><br><br>
+</#list>
 <b>Название: </b>${product.title}<br>
 <b>Описание: </b>${product.description}<br>
 <b>Состав: </b>${product.structure}<br>
