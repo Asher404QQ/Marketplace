@@ -8,7 +8,11 @@
     <title>Marketplace</title>
 </head>
 <body>
-    <h1>MARKETPLACE</h1>
+    <h1>MARKETPLACE | <a href="/login">Войти</a></h1><hr>
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="${_csrf.token}">
+        <input type="submit" value="Выйти">
+    </form>
     <h4>Товары по всей России!</h4>
     <form action="/" method="get">
         Поиск объявления по названию: <input type="text" name="title"><br>
