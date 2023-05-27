@@ -12,6 +12,7 @@ import ru.kors.marketplace.models.Product;
 import ru.kors.marketplace.service.ProductService;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,8 +20,9 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/")
-    public String products(@RequestParam(name = "title", required = false) String title, Model model) {
+    public String products(@RequestParam(name = "title", required = false) String title, Model model, Principal principal) {
         model.addAttribute("products", productService.getProducts(title));
+        model.addAttribute("user", productService.getUserByPrincipal(principal));
         return "products";
     }
 
@@ -35,8 +37,8 @@ public class ProductController {
     @PostMapping("/product/create")
     public String createProduct(@RequestParam("file1") MultipartFile file1, @RequestParam("file2") MultipartFile file2,
                                 @RequestParam("file3") MultipartFile file3, @RequestParam("file3") MultipartFile file4,
-                                @RequestParam("file3") MultipartFile file5, Product product) throws IOException {
-        productService.saveProduct(product, file1, file2, file3, file4, file5);
+                                @RequestParam("file3") MultipartFile file5, Product product, Principal principal) throws IOException {
+        productService.saveProduct(principal, product, file1, file2, file3, file4, file5);
         return "redirect:/";
     }
 

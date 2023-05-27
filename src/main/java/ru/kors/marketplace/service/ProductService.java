@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import ru.kors.marketplace.models.Image;
 import ru.kors.marketplace.models.Product;
+import ru.kors.marketplace.models.User;
 import ru.kors.marketplace.repositories.ProductRepository;
+import ru.kors.marketplace.repositories.UserRepository;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final UserRepository userRepository;
+
     private List<Product> products = new ArrayList<>();
     private static Long ID = 0L;
 
@@ -25,7 +30,8 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public void saveProduct(Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3, MultipartFile file4, MultipartFile file5) throws IOException {
+    public void saveProduct(Principal principal, Product product, MultipartFile file1, MultipartFile file2, MultipartFile file3, MultipartFile file4, MultipartFile file5) throws IOException {
+        product.setUser(getUserByPrincipal(principal));
         Image image1;
         Image image2;
         Image image3;
@@ -54,12 +60,17 @@ public class ProductService {
             product.addImageToProduct(image5);
         }
 
-        log.info("Saving new Product. Title: {}; Author: {}", product.getTitle(), product.getAuthor());
+        log.info("Saving new Product. Title: {}; Author email: {}", product.getTitle(), product.getUser().getEmail());
 
         Product productFromDB = productRepository.save(product);
         productFromDB.setPreviewImageId(productFromDB.getImages().get(0).getId());
 
         productRepository.save(product);
+    }
+
+    public User getUserByPrincipal(Principal principal) {
+        if (principal == null) return new User();
+        return userRepository.findByEmail(principal.getName());
     }
 
     private Image toImageEntity(MultipartFile file) throws IOException {

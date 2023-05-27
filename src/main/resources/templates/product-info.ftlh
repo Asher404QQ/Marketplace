@@ -18,10 +18,7 @@
 <b>Состав: </b>${product.structure}<br>
 <b>Цена: </b>${product.price} руб.<br>
 <b>Вес: </b>${product.weight} гр.<br>
-<b>Автор: </b>${product.author}<br>
-<hr>
-<form action="/product/delete/${product.id}" method="post">
-    <input type="submit" value="Удалить товар">
-</form>
+<b>Автор: </b>${product.user.name}<br>
+<b>Номер телефона: </b>${product.user.phoneNumber}<br>
 </body>
 </html>
