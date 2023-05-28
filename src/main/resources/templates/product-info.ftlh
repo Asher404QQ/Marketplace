@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Marketplace</title>
+    <title>MARKETPLACE</title>
 </head>
 <body>
 <h1>MARKETPLACE</h1>
@@ -18,7 +18,6 @@
 <b>Состав: </b>${product.structure}<br>
 <b>Цена: </b>${product.price} руб.<br>
 <b>Вес: </b>${product.weight} гр.<br>
-<b>Автор: </b>${product.user.name}<br>
-<b>Номер телефона: </b>${product.user.phoneNumber}<br>
+<b>Автор: </b><a href="/user/${product.user.id}">${product.user.name}</a><br>
 </body>
 </html>
